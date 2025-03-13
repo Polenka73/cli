@@ -1,0 +1,42 @@
+import { useState } from "react";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+
+export default function UstiActivitiesApp() {
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
+  const activities = [
+    { id: 1, name: "Lezecká stěna", location: [50.6607, 14.0406], date: "2025-03-20" },
+    { id: 2, name: "Kreativní workshop", location: [50.6631, 14.0415], date: "2025-03-22" },
+    { id: 3, name: "Úniková hra – start", location: [50.6674, 14.0423], date: "2025-03-25" },
+  ];
+
+  return (
+    <div className="p-4 space-y-4">
+      <h1 className="text-xl font-bold">Aktivity v Ústí nad Labem</h1>
+      <Card>
+        <CardContent>
+          <Calendar
+            selected={selectedDate}
+            onChange={setSelectedDate}
+            className="w-full"
+          />
+        </CardContent>
+      </Card>
+      <MapContainer center={[50.6607, 14.0406]} zoom={14} className="h-64 w-full rounded-lg">
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        {activities.map((activity) => (
+          <Marker key={activity.id} position={activity.location}>
+            <Popup>{activity.name}</Popup>
+          </Marker>
+        ))}
+      </MapContainer>
+      <Button className="w-full">Zapojit se do únikové hry</Button>
+    </div>
+  );
+}
